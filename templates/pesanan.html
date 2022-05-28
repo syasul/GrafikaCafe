@@ -1,0 +1,82 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+{% if messages %}
+            {% for msg in messages %}
+            <div class="alert alert-{{msg.tags}}" role="alert">{{msg}}</div>
+            {% endfor %}
+{% endif %}
+
+<div class="row row-cols-1 row-cols-sm-3 g-1">
+  
+  {% for m in menu %}
+  <div class="col-sm-3">
+    <div class="card shadow" style="width: 18rem; height: 21rem;">
+      <div class="card-body">
+        <img src="{{m.image.url}}" width="100%" height="120px">
+        <h5 class="card-title">{{m.name}}</h5>
+        <p class="card-text">{{m.desc}}</p>
+        <p class="card-title">RP. {{m.price}}</p>
+        <div class="">
+            <button type="button" class="btn btn-primary" style="width: 100%" data-bs-toggle="modal" data-bs-target="#exampleModalPesan-{{m.id}}">Pesan</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+
+
+{% for p in menu %}
+<!-- Modal pesanan -->
+<div class="modal fade" id="exampleModalPesan-{{p.id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Pesan</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+          <div class="text-center">
+              <img src="{{p.image.url}}" width="200rem">
+          </div>
+          <br>
+        <form method="POST" action="{% url 'tambah-pesanan' %}">
+            {% csrf_token %}
+            <div class="mb-3 row">
+                <label for="inputname" class="col-sm-2 col-form-label">Name</label>
+                    <div class="col-sm-10">
+                        <input type="name" class="form-control" id="inputname" name="name" value="{{p.name}}" disabled>
+                    </div>
+            </div>
+            <div class="mb-3 row">
+                <label for="inputprice" class="col-sm-2 col-form-label">Price</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" id="inputprice" name="price" value="Rp {{p.price}}" disabled>
+                </div>
+            </div>
+            <div class="mb-3 row">
+                <label for="inputimage" class="col-sm-2 col-form-label">Quantity</label>
+                <div class="col-sm-10">
+                    <input type="number" class="form-control" id="inputimage" name="quantity">
+                </div>
+            </div>
+            <div class="mb-3 row">
+              <label for="inputimage" class="col-sm-2 col-form-label">No Meja</label>
+              <div class="col-sm-10">
+                  <input type="number" class="form-control" id="inputimage" name="no_meja">
+              </div>
+          </div>
+            <input type="hidden" name="menuID" value="{{p.id}}">
+            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                <button class="btn btn-primary" type="submit">Pesan</button>
+            </div>
+        </form>
+
+      </div>
+    </div>
+  </div>
+</div>
+{% endfor %}
+{% endblock content %}

@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+
+
+{% if messages %}
+            {% for msg in messages %}
+            <div class="alert alert-{{msg.tags}}" role="alert">{{msg}}</div>
+            {% endfor %}
+{% endif %}
+
+<div class="card shadow">
+  <div class="card-body">
+
+    <table class="table">
+  <tbody>
+
+    <!-- <tr>
+      <td>Penjualan satu bulan lalu</td>
+      <td>Rp. {{penjualan_bulan_lalu}}</td>
+    </tr> -->
+    <tr>
+      <form method="get">
+      <td>Penjualan harian: <input type="date" name="harian" id="harian" /><button type="submit" class="btn btn-primary">Lihat</button></td>
+      <td>Rp. {{penjualan_bulan_lalu}}</td>
+    </form>
+    </tr>
+  </tbody>
+</table>
+  </div>
+</div>
+
+
+
+
+
+{% endblock content %}

@@ -1,0 +1,131 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+{% if messages %}
+            {% for msg in messages %}
+            <div class="alert alert-{{msg.tags}}" role="alert">{{msg}}</div>
+            {% endfor %}
+{% endif %}
+
+<div class="d-grid gap-2">
+  <form method="get">
+    <input name="search" placeholder="cari nomor meja" class="form-control"/>
+  </form>
+</div>
+<div class="d-grid gap-2">
+  <a class="btn btn-primary mb-3" href="{% url 'pesanan' %}" role="button">Tambah pesanan</a>
+</div>
+<div class="card shadow">
+  <div class="card-body">
+
+    <table class="table">
+  <thead class="table-dark">
+    <tr>
+      <th scope="col" class = "text-center">Date</th>
+      <th scope="col" class = "text-center">Menu</th>
+      <th scope="col" class = "text-center">Price</th>
+      <th scope="col" class = "text-center">Quantity</th>
+      <th scope="col" class = "text-center">Amount</th>
+      <th scope="col" class = "text-center">No Meja</th>
+      <th scope="col" class = "text-center">Action</th>
+    </tr>
+  </thead>
+  <tbody>
+      {% for t in transaksi %}
+    <tr>
+      <td class = "text-center">{{t.date|date:"Y m d H:m:s"}}</td>
+      <td class = "text-center">{{t.menu.name}}</td>
+      <td class = "text-center">RP. {{t.menu.price}}</td>
+      <td class = "text-center">{{t.quantity}}</td>
+      <td class = "text-center">RP. {{t.amount}}</td>
+      <td class = "text-center">{{t.no_meja}}</td>
+      <td class = "text-center">
+          <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#exampleModalUpdate-{{t.id}}">Update</button>
+          <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#exampleModalDelete-{{t.id}}">Delete</button>
+      </td>
+      {% endfor %}
+    </tr>
+  </tbody>
+</table>
+  </div>
+</div>
+
+
+
+
+<!-- Modal transaksi update -->
+{% for p in transaksi %}
+<div class="modal fade" id="exampleModalUpdate-{{p.id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Update pesanan</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+
+        <form method="POST" action="{% url 'update-pesanan' %}">
+            {% csrf_token %}
+            <div class="mb-3 row">
+                <label for="inputname" class="col-sm-2 col-form-label">Name</label>
+                    <div class="col-sm-10">
+                        <input type="name" class="form-control" id="inputname" name="name" value="{{p.menu.name}}" disabled>
+                    </div>
+            </div>
+            <div class="mb-3 row">
+                <label for="inputprice" class="col-sm-2 col-form-label">Price</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" id="inputprice" name="price" value="{{p.price}}" disabled>
+                </div>
+            </div>
+            <div class="mb-3 row">
+                <label for="inputimage" class="col-sm-2 col-form-label">Amount</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" id="inputimage" name="amount" value="Rp {{p.amount}}" disabled>
+                </div>
+            </div>
+            <div class="mb-3 row">
+                <label for="inputimage" class="col-sm-2 col-form-label">Quantity</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" id="inputimage" name="quantity" value="{{p.quantity}}">
+                </div>
+            </div>
+            <input type="hidden" name="id" value="{{p.id}}">
+            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                <button class="btn btn-primary" type="submit">Update</button>
+            </div>
+        </form>
+
+      </div>
+    </div>
+  </div>
+</div>
+{% endfor %}
+
+
+<!-- Modal transaksi delete -->
+{% for d in transaksi %}
+<div class="modal fade" id="exampleModalDelete-{{d.id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Delete menu</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+          <h5>Yakin yakin menghapus transaksi '{{d.menu.name}}'?</h5>
+        <form method="POST" action="{% url 'delete-transaksi' %}">
+            {% csrf_token %}
+            <input type="hidden" name="id" value="{{d.id}}">
+            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                <button class="btn btn-danger" type="submit">Delete</button>
+            </div>
+        </form>
+
+      </div>
+    </div>
+  </div>
+</div>
+{% endfor %}
+{% endblock content %}

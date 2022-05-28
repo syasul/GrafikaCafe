@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+{% if messages %}
+            {% for msg in messages %}
+            <div class="alert alert-{{msg.tags}}" role="alert">{{msg}}</div>
+            {% endfor %}
+{% endif %}
+
+
+<div class="card shadow">
+  <div class="card-body">
+
+    <table class="table">
+  <thead class="table-dark">
+    <tr>
+      <th scope="col" class = "text-center">Pegawai</th>
+      <th scope="col" class = "text-center">Actifity</th>
+      <th scope="col" class = "text-center">Date</th>
+      
+    </tr>
+  </thead>
+  <tbody>
+      {% for i in log %}
+    <tr>
+      
+        <td class = "text-center">{{i.pegawai}}</td>
+        <td>{{i.activity}}</td>
+        <td class = "text-center">{{i.date|date:"Y m d H:m:s"}}</td>
+      
+      {% endfor %}
+    </tr>
+  </tbody>
+</table>
+  </div>
+</div>
+
+
+
+{% endblock content %}

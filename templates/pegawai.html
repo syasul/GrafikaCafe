@@ -1,0 +1,166 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+
+
+{% if messages %}
+            {% for msg in messages %}
+            <div class="alert alert-{{msg.tags}}" role="alert">{{msg}}</div>
+            {% endfor %}
+{% endif %}
+<div class="d-grid gap-2">
+  <button type="button" class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#exampleModalPegawaiBaru">
+  Tambah pegawai baru
+</button>
+</div>
+<div class="card shadow">
+  <div class="card-body">
+
+    <table class="table">
+  <thead class="table-dark">
+    <tr>
+      <th scope="col" class = "text-center">Username</th>
+      <th scope="col" class = "text-center">Password</th>
+      <th scope="col" class = "text-center">Role</th>
+      <th scope="col" class = "text-center">Action</th>
+    </tr>
+  </thead>
+  <tbody>
+      {% for p in pegawai %}
+    <tr>
+      <td class = "text-center">{{p.username}}</td>
+      <td class = "text-center">{{p.text_password}}</td>
+      <td class = "text-center">{{p.role}}</td>
+      <td class = "text-center">
+          <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#exampleModalUpdate-{{p.id}}">Update</button>
+          <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#exampleModalDelete-{{p.id}}">Delete</button>
+      </td>
+      {% endfor %}
+    </tr>
+  </tbody>
+</table>
+  </div>
+</div>
+
+
+
+<!-- Modal pegawai baru -->
+<div class="modal fade" id="exampleModalPegawaiBaru" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Pegawai baru</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+
+        <form method="POST" action="{% url 'tambah-pegawai' %}">
+            {% csrf_token %}
+            <div class="mb-3 row">
+                <label for="inputname" class="col-sm-2 col-form-label">Username</label>
+                    <div class="col-sm-10">
+                        <input type="name" class="form-control" id="inputname" name="username">
+                    </div>
+            </div>
+            <div class="mb-3 row">
+                <label for="inputprice" class="col-sm-2 col-form-label">Password</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" id="inputprice" name="password">
+                </div>
+            </div>
+            <div class="mb-3 row">
+                <label for="inputimage" class="col-sm-2 col-form-label">Role</label>
+                <div class="col-sm-10">
+                    <select class="form-select" id="inputimage" aria-label="Default select example" name="role">
+                        <option value="Admin">Admin</option>
+                        <option value="Manager">Manager</option>
+                        <option value="Kasir">Kasir</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                <button class="btn btn-primary" type="submit">Tambah</button>
+            </div>
+        </form>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- Modal pegawai update -->
+{% for u in pegawai %}
+<div class="modal fade" id="exampleModalUpdate-{{u.id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Update menu</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+
+        <form method="POST" action="{% url 'update-pegawai' %}">
+            {% csrf_token %}
+            <div class="mb-3 row">
+                <label for="inputname" class="col-sm-2 col-form-label">Userame</label>
+                    <div class="col-sm-10">
+                        <input type="name" class="form-control" id="inputname" name="username" value="{{u.username}}">
+                    </div>
+            </div>
+            <div class="mb-3 row">
+                <label for="inputprice" class="col-sm-2 col-form-label">Password</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" id="inputprice" name="password" value="{{u.text_password}}">
+                </div>
+            </div>
+            <div class="mb-3 row">
+                <label for="inputimage" class="col-sm-2 col-form-label">Role</label>
+                <div class="col-sm-10">
+                    <select class="form-select" aria-label="Default select example" name="role">
+                        <option value="Admin">Admin</option>
+                        <option value="Manager">Manager</option>
+                        <option value="Kasir">Kasir</option>
+                    </select>
+                </div>
+            </div>
+            <input type="hidden" name="id" value="{{u.id}}">
+            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                <button class="btn btn-primary" type="submit">Update</button>
+            </div>
+        </form>
+
+      </div>
+    </div>
+  </div>
+</div>
+{% endfor %}
+
+
+<!-- Modal pegawai delete -->
+{% for d in pegawai %}
+<div class="modal fade" id="exampleModalDelete-{{d.id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Delete pegawai</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+          <h5>Yakin yakin menghapus pegawai '{{d.username}}'?</h5>
+        <form method="POST" action="{% url 'delete-pegawai' %}">
+            {% csrf_token %}
+            <input type="hidden" name="id" value="{{d.id}}">
+            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                <button class="btn btn-danger" type="submit">Delete</button>
+            </div>
+        </form>
+
+      </div>
+    </div>
+  </div>
+</div>
+{% endfor %}
+{% endblock content %}
