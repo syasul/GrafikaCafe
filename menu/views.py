@@ -40,7 +40,7 @@ def tambahMenu(request):
         author = request.user
 
         add_menu_dict = {
-            "Name" : name,
+            "Name": name,
             "Price": price,
             "Desc": desc,
             "Stok": stok,
@@ -49,8 +49,9 @@ def tambahMenu(request):
         try:
             Menu.objects.create(name=name, price=int(
                 price), image=image, desc=desc, stok=stok, author=author)
-            Logaktifitas.objects.create(pegawai=request.user, activity="Menambahkan Menu %s"%add_menu_dict , date=date_now)
-            
+            Logaktifitas.objects.create(
+                pegawai=request.user, activity="Menambahkan Menu %s" % add_menu_dict, date=date_now)
+
             messages.success(request, 'Success menambah menu baru')
         except:
             messages.error(request, 'Failed menambah menu baru')
@@ -83,7 +84,7 @@ def updateMenu(request):
         menu_obj.image = image
 
         update_menu_dict = {
-            "menuID" : menuID,
+            "menuID": menuID,
             "Name": name,
             "Price": price,
             "Desc": desc,
@@ -93,7 +94,8 @@ def updateMenu(request):
         print(update_menu_dict)
         try:
             menu_obj.save()
-            Logaktifitas.objects.create(pegawai=request.user, activity="Mengupdate Menu menjadi %s"%update_menu_dict , date=date_now)
+            Logaktifitas.objects.create(
+                pegawai=request.user, activity="Mengupdate Menu menjadi %s" % update_menu_dict, date=date_now)
             messages.success(request, 'Success update menu')
         except:
             messages.error(request, 'Failed update menu')
@@ -108,12 +110,12 @@ def deleteMenu(request):
     else:
         return HttpResponse('Anda bukan manager')
     if request.method == "POST":
-
         try:
             menu_name = Menu.objects.filter(id=request.POST.get('id'))
             print(menu_name)
             Menu.objects.filter(id=request.POST.get('id')).delete()
-            Logaktifitas.objects.create(pegawai=request.user, activity="Mendelete Menu %s"%menu_name , date=date_now)
+            Logaktifitas.objects.create(
+                pegawai=request.user, activity="Mendelete Menu %s" % menu_name, date=date_now)
             messages.success(request, 'Success delete menu')
         except:
             messages.error(request, 'Failed delete menu')
