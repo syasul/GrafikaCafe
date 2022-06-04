@@ -129,7 +129,7 @@
                 </div>
             </div>
             <div class="mb-3">
-              <label class="form-label">Desc</label>
+              <label class="col-sm-2 col-form-label">Desc</label>
               <div class="col-sm-10">
                 <input type="text-area" class="form-control" id="inputprice" name="desc" value="{{u.desc}}">
               </div>
@@ -163,12 +163,13 @@
     </div>
   </div>
 </div>
+</div>
 {% endfor %}
 
 
 <!-- Modal pegawai delete -->
 {% for d in menu %}
-<div class="modal fade" id="exampleModalDelete-{{d.id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="exampleModalDelete-{{d.id}}" tabindex="-1" aria-labelledby="exampleModalLabel">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
@@ -188,6 +189,7 @@
       </div>
     </div>
   </div>
+</div>
 </div>
 {% endfor %}
 {% endblock content %}
